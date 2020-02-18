@@ -10,6 +10,7 @@ import java.util.logging.LogManager;
 
 @ApplicationScoped
 @ApplicationPath("/")
+@Deprecated
 public class Main extends javax.ws.rs.core.Application {
     /**
      * Cannot be instantiated.

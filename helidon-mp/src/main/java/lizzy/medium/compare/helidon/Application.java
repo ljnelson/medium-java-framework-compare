@@ -1,9 +1,8 @@
 package lizzy.medium.compare.helidon;
 
-import io.helidon.common.CollectionsHelper;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.ApplicationPath;
+import java.util.Collections;
 import java.util.Set;
 
 @ApplicationScoped
@@ -12,6 +11,6 @@ public class Application extends javax.ws.rs.core.Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return CollectionsHelper.setOf(RestInterface.class);
+        return Collections.singleton(RestInterface.class);
     }
 }

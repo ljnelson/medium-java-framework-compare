@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import java.util.UUID;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQuery(name = "Issue.findAll", query = "SELECT i FROM Issue as i")
 public class Issue {
     @Id
     private UUID id;

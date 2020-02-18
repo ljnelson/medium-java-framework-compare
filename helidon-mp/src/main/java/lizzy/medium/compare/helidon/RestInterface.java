@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Path("/issue")
 @RequestScoped
 public class RestInterface {
+  
     private final Repository repository;
 
     @Inject
@@ -23,9 +25,17 @@ public class RestInterface {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Issue> readAll() {
-        List<Issue> list = new ArrayList<>();
-        repository.findAll().forEach(list::add);
-        return list;
+        final Iterable<Issue> result = repository.findAll();
+        final List<Issue> returnValue;
+        if (result instanceof List) {
+          returnValue = (List<Issue>) result;
+        } else if (result != null) {
+          returnValue = new ArrayList<>();
+          result.forEach(returnValue::add);
+        } else {
+          returnValue = Collections.emptyList();
+        }
+        return returnValue;
     }
 
     @GET
@@ -60,7 +70,7 @@ public class RestInterface {
     public Issue partialUpdate(@PathParam("id") UUID id, Issue body) {
         final Issue issue = repository.findById(id).orElseThrow(RuntimeException::new);
         issue.partialUpdate(body);
-        return repository.update(issue);
+        return issue;
     }
 
     @DELETE

@@ -8,5 +8,8 @@
         <description>A persistence unit for the greeting example.</description>
         <jta-data-source>dataSource</jta-data-source>
         <class>lizzy.medium.compare.helidon.Issue</class>
+        <properties>
+          <property name="hibernate.dialect" value="PostgreSQL9"/>
+        </properties>
     </persistence-unit>
 </persistence>

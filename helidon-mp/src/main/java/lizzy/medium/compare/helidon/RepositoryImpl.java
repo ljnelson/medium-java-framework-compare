@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class RepositoryImpl implements Repository {
+
     @PersistenceContext
-    private
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Optional<Issue> findById(UUID id) {
@@ -27,23 +27,17 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void deleteById(UUID id) {
-        findById(id).ifPresent(issue -> entityManager.remove(issue));
+        entityManager.remove(entityManager.getReference(Issue.class, id));
     }
 
     @Override
     public List<Issue> findAll() {
-        String qlString = "SELECT g FROM Issue as g";
-        TypedQuery<Issue> query = entityManager.createQuery(qlString, Issue.class);
-        return query.getResultList();
+        return entityManager.createNamedQuery("Issue.findAll", Issue.class).getResultList();
     }
 
     @Override
     public Issue update(Issue issue) {
-        entityManager.createQuery("UPDATE Issue g SET name = :name, description = :description where id = :id")
-                .setParameter("name", issue.getName())
-                .setParameter("description", issue.getDescription())
-                .setParameter("id", issue.getId())
-                .executeUpdate();
-        return findById(issue.getId()).orElseThrow(RuntimeException::new);
+        return entityManager.merge(issue);
     }
+
 }
